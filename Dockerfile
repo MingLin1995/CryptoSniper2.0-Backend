@@ -27,6 +27,4 @@ ARG NODE_ENV=development
 # 將 ARG 的值設置為環境變量
 ENV NODE_ENV=${NODE_ENV}
 
-# 如果 NODE_ENV 是 production，則先構建項目然後運行生產版本
-# 否則運行開發版本
-CMD if [ "$NODE_ENV" = "production" ] ; then pnpm run build && pnpm run start:prod ; else pnpm run start:dev ; fi
+CMD ["sh", "-c", "NODE_ENV=${NODE_ENV} node dist/main.js"]

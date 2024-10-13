@@ -25,6 +25,23 @@ docker system prune -f
 echo "Building and starting test container..."
 docker-compose -f $COMPOSE_FILE --env-file $ENV_FILE --project-name $PROJECT_NAME up --build -d
 
+# 等待容器啟動
+echo "Waiting for container to start..."
+sleep 10
+
+# 檢查容器狀態
+echo "Checking container status..."
+docker ps -a | grep $CONTAINER_NAME
+
+# 檢查容器日誌
+echo "Checking container logs..."
+docker logs $CONTAINER_NAME
+
+# 檢查容器文件系統
+echo "Checking container filesystem..."
+docker exec $CONTAINER_NAME ls -la /usr/src/app
+docker exec $CONTAINER_NAME ls -la /usr/src/app/dist
+
 # 顯示容器日誌
 echo "Displaying container logs..."
 docker-compose -f $COMPOSE_FILE --env-file $ENV_FILE --project-name $PROJECT_NAME logs -f
