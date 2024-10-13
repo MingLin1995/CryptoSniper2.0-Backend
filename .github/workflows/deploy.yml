@@ -52,7 +52,6 @@ jobs:
           PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           HOST: ${{ secrets.EC2_HOST }}
           USER: ubuntu
-          ENV_DEV: ${{ secrets.ENV_DEV }}
           ENV_TEST: ${{ secrets.ENV_TEST }}
           ENV_PROD: ${{ secrets.ENV_PROD }}
         run: |
@@ -67,18 +66,14 @@ jobs:
             ENV_CONTENT="$ENV_PROD"
           fi
 
-          echo "Debug: ENVIRONMENT=$ENVIRONMENT"
-          echo "Debug: SCRIPT=$SCRIPT"
-          echo "Debug: ENV_CONTENT length=${#ENV_CONTENT}"
 
           ssh ${USER}@${HOST} "
             set -x
             cd CryptoSniper2.0-Backend/ &&
             git checkout ${{ github.ref_name }} &&
             git pull &&
-            echo \"$ENV_CONTENT\" > .env.$ENVIRONMENT &&
-            ls -l .env.$ENVIRONMENT &&
-            cat .env.$ENVIRONMENT &&
+            echo "$ENV_CONTENT" > .env.$ENVIRONMENT &&
+            npm install -g pnpm &&
             pnpm install &&
             pnpm run $SCRIPT
           "
