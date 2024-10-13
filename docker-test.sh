@@ -54,6 +54,12 @@ docker exec $CONTAINER_NAME ls -la /usr/src/app/dist
 echo "Attempting to run the application manually..."
 docker exec $CONTAINER_NAME node dist/main.js
 
+# 如果手動運行失敗，重新啟動容器
+if [ $? -ne 0 ]; then
+    echo "Manual run failed. Restarting container..."
+    docker-compose -f $COMPOSE_FILE --env-file $ENV_FILE --project-name $PROJECT_NAME up -d
+fi
+
 # 顯示容器日誌
 echo "Displaying container logs..."
 docker-compose -f $COMPOSE_FILE --env-file $ENV_FILE --project-name $PROJECT_NAME logs -f
