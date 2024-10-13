@@ -69,11 +69,13 @@ jobs:
 
           ssh ${USER}@${HOST} "
             set -x
+            export NVM_DIR=\$HOME/.nvm
+            [ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\"
             cd CryptoSniper2.0-Backend/ &&
             git checkout ${{ github.ref_name }} &&
             git pull &&
-            echo "$ENV_CONTENT" > .env.$ENVIRONMENT &&
+            echo \"$ENV_CONTENT\" > .env.\$ENVIRONMENT &&
             npm install -g pnpm &&
             pnpm install &&
-            pnpm run $SCRIPT
+            pnpm run \$SCRIPT
           "
