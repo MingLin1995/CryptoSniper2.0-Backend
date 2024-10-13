@@ -23,8 +23,8 @@ services:
       - '${PORT:-3001}:3000'
     # 卷掛載，用於開發環境中的熱重載
     volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+      - ${VOLUMES:-.:/usr/src/app}
+      - ${NODE_MODULES_VOLUME:-node_modules:/usr/src/app/node_modules}
     # 設置容器內的環境變量
     environment:
       - NODE_ENV=${NODE_ENV:-development}
