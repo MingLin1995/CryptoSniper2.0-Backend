@@ -52,12 +52,13 @@ pnpm run test
 
 ### 設置步驟
 
+0. 先進入 EC2 內將專案 git clone 下來
+
 1. 在 GitHub 存儲庫中，進入 "Settings" > "Secrets and variables" > "Actions"
 
 2. 增加以下 secrets
 
    - `EC2_SSH_PRIVATE_KEY`:
-
      ```
      -----BEGIN RSA PRIVATE KEY-----
      MIIEpAIBAAKCAQEAn4XOc6lV/PxnyhbkZJKRoWbM7O4UE3Wj+Uf5cVhNTbKZuOc4
@@ -65,9 +66,6 @@ pnpm run test
      NQ7n6KWpV5e4Yt9msN9s6/TJsaving6igyMQrwqRx2A8Yq5Q==
      -----END RSA PRIVATE KEY-----
      ```
-
    - `EC2_HOST`: `ec2-xx-xx-xx-xx.compute-1.amazonaws.com`
-
-   - `ENV_DEV`
    - `ENV_TEST`
    - `ENV_PROD`
