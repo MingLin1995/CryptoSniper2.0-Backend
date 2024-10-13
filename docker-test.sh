@@ -42,6 +42,18 @@ echo "Checking container filesystem..."
 docker exec $CONTAINER_NAME ls -la /usr/src/app
 docker exec $CONTAINER_NAME ls -la /usr/src/app/dist
 
+# 在容器內執行構建
+echo "Building the application inside the container..."
+docker exec $CONTAINER_NAME pnpm run build
+
+# 再次檢查 dist 目錄
+echo "Checking dist directory after build..."
+docker exec $CONTAINER_NAME ls -la /usr/src/app/dist
+
+# 嘗試手動運行應用
+echo "Attempting to run the application manually..."
+docker exec $CONTAINER_NAME node dist/main.js
+
 # 顯示容器日誌
 echo "Displaying container logs..."
 docker-compose -f $COMPOSE_FILE --env-file $ENV_FILE --project-name $PROJECT_NAME logs -f
