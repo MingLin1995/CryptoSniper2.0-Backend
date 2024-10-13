@@ -77,5 +77,6 @@ jobs:
             echo \"$ENV_CONTENT\" > .env.\$ENVIRONMENT &&
             npm install -g pnpm &&
             pnpm install &&
+            echo 'Running script: \$SCRIPT'
             pnpm run \$SCRIPT
           "
