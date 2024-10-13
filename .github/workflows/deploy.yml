@@ -66,11 +66,19 @@ jobs:
             SCRIPT="docker:prod"
             ENV_CONTENT="$ENV_PROD"
           fi
-          ssh ${USER}@${HOST} '
+
+          echo "Debug: ENVIRONMENT=$ENVIRONMENT"
+          echo "Debug: SCRIPT=$SCRIPT"
+          echo "Debug: ENV_CONTENT length=${#ENV_CONTENT}"
+
+          ssh ${USER}@${HOST} "
+            set -x
             cd CryptoSniper2.0-Backend/ &&
             git checkout ${{ github.ref_name }} &&
             git pull &&
-            echo "$ENV_CONTENT" > .env.$ENVIRONMENT &&
+            echo \"$ENV_CONTENT\" > .env.$ENVIRONMENT &&
+            ls -l .env.$ENVIRONMENT &&
+            cat .env.$ENVIRONMENT &&
             pnpm install &&
             pnpm run $SCRIPT
-          '
+          "
