@@ -27,4 +27,5 @@ ARG NODE_ENV=development
 # 將 ARG 的值設置為環境變量
 ENV NODE_ENV=${NODE_ENV}
 
-CMD ["sh", "-c", "if [ \"$NODE_ENV\" = \"development\" ]; then pnpm run start:dev; else node dist/main.js; fi"]
+# 使用 start.sh 腳本作為入口點
+CMD ["/bin/sh", "/usr/src/app/start.sh"]
