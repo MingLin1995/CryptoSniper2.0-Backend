@@ -9,7 +9,7 @@ on:
 # 定義工作
 jobs:
   # 測試和部署工作
-  test-and-deploy:
+  test:
     # 在最新版本的 Ubuntu 上運行
     runs-on: ubuntu-latest
 
@@ -36,7 +36,13 @@ jobs:
       - name: Run tests
         run: pnpm test
 
-      # 步驟 6：設置 SSH
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: success()
+
+    steps:
+      # 步驟 1：設置 SSH
       # 這個步驟創建 SSH 密鑰，以便後續可以安全地連接到 EC2
       - name: Set up SSH
         run: |
@@ -45,7 +51,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      # 步驟 7：部署到 EC2
+      # 步驟 2：部署到 EC2
       - name: Deploy to EC2
         env:
           # 設置環境變量，這些變量來自 GitHub Secrets

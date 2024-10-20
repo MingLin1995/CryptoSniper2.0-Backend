@@ -4,7 +4,7 @@
 COMPOSE_FILE="docker-compose.yml"
 ENV_FILE=".env.test"
 PROJECT_NAME="cryptosniper-test"
-CONTAINER_NAME="cryptosniper20-backend-test"
+CONTAINER_NAME="cryptosniper2.0-backend-test"
 
 # 檢查並停止現有的容器（如果存在）
 if docker ps -q -f name=$CONTAINER_NAME | grep -q .; then
