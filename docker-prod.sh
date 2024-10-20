@@ -25,6 +25,4 @@ docker system prune -f
 echo "Building and starting production container..."
 docker-compose -f $COMPOSE_FILE --env-file $ENV_FILE --project-name $PROJECT_NAME up --build -d
 
-# 顯示容器日誌
-echo "Displaying container logs..."
-docker-compose -f $COMPOSE_FILE --env-file $ENV_FILE --project-name $PROJECT_NAME logs -f
+
