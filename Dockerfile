@@ -16,7 +16,7 @@ RUN pnpm install
 # 複製所有內容到工作目錄
 COPY . .
 
-# 編譯應用程式並檢查 dist 目錄
+# 編譯應用程式
 RUN pnpm run build 
 
 # 對應 3000 port （main.ts）
@@ -27,5 +27,4 @@ ARG NODE_ENV=development
 # 將 ARG 的值設置為環境變量
 ENV NODE_ENV=${NODE_ENV}
 
-# 使用 start.sh 腳本作為入口點
-CMD ["/bin/sh", "/usr/src/app/start.sh"]
+CMD ["sh", "-c", "if [ \"$NODE_ENV\" = \"development\" ]; then pnpm run start:dev; else node dist/main.js; fi"]

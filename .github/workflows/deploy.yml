@@ -77,7 +77,7 @@ jobs:
             echo \"$ENV_CONTENT\" > .env.\$ENVIRONMENT &&
             npm install -g pnpm &&
             pnpm install &&
-            chmod +x start.sh &&  # 設置執行權限
+            pnpm run build
             echo 'Running script: $SCRIPT' &&
             pnpm run $SCRIPT
           "

@@ -28,8 +28,6 @@ services:
     # 設置容器內的環境變量
     environment:
       - NODE_ENV=${NODE_ENV:-development}
-    # 指定容器啟動時執行的命令
-    command: sh /usr/src/app/start.sh
     # 將容器連接到指定的網絡
     networks:
       - cryptosniper-network
