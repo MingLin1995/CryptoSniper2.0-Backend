@@ -9,7 +9,7 @@ CONTAINER_NAME="cryptosniper20-backend-test"
 # 檢查並停止現有的容器（如果存在）
 if docker ps -q -f name=$CONTAINER_NAME | grep -q .; then
     echo "Stopping existing container..."
-    docker-compose -f $COMPOSE_FILE --env-file $ENV_FILE --project-name $PROJECT_NAME down
+    docker-compose -f $COMPOSE_FILE --env-file $ENV_FILE --project-name $PROJECT_NAME down 
 else
     echo "No existing container found."
 fi
@@ -24,41 +24,6 @@ docker system prune -f
 # 構建並啟動測試容器
 echo "Building and starting test container..."
 docker-compose -f $COMPOSE_FILE --env-file $ENV_FILE --project-name $PROJECT_NAME up --build -d
-
-# 等待容器啟動
-echo "Waiting for container to start..."
-sleep 10
-
-# 檢查容器狀態
-echo "Checking container status..."
-docker ps -a | grep $CONTAINER_NAME
-
-# 檢查容器日誌
-echo "Checking container logs..."
-docker logs $CONTAINER_NAME
-
-# 檢查容器文件系統
-echo "Checking container filesystem..."
-docker exec $CONTAINER_NAME ls -la /usr/src/app
-docker exec $CONTAINER_NAME ls -la /usr/src/app/dist
-
-# 在容器內執行構建
-echo "Building the application inside the container..."
-docker exec $CONTAINER_NAME pnpm run build
-
-# 再次檢查 dist 目錄
-echo "Checking dist directory after build..."
-docker exec $CONTAINER_NAME ls -la /usr/src/app/dist
-
-# 嘗試手動運行應用
-echo "Attempting to run the application manually..."
-docker exec $CONTAINER_NAME node dist/main.js
-
-# 如果手動運行失敗，重新啟動容器
-if [ $? -ne 0 ]; then
-    echo "Manual run failed. Restarting container..."
-    docker-compose -f $COMPOSE_FILE --env-file $ENV_FILE --project-name $PROJECT_NAME up -d
-fi
 
 # 顯示容器日誌
 echo "Displaying container logs..."

@@ -23,13 +23,13 @@ services:
       - '${PORT:-3001}:3000'
     # 卷掛載，用於開發環境中的熱重載
     volumes:
-      - ${VOLUMES:-.:/usr/src/app}
-      - ${NODE_MODULES_VOLUME:-node_modules:/usr/src/app/node_modules}
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
     # 設置容器內的環境變量
     environment:
       - NODE_ENV=${NODE_ENV:-development}
     # 指定容器啟動時執行的命令
-    command: ${COMMAND:-pnpm run start:dev}
+    command: sh /usr/src/app/start.sh
     # 將容器連接到指定的網絡
     networks:
       - cryptosniper-network
@@ -41,9 +41,6 @@ networks:
     #  指定網絡名稱
     name: cryptosniper-network-${ENV:-dev}
 
+# 定義命名卷
 volumes:
   node_modules:
-    # 定義一個名為 node_modules 的卷
-    # 這個卷用於存儲 Node.js 項目的依賴包
-    # 使用卷可以提高構建速度，因為依賴包不需要每次都重新安裝
-    name: cryptosniper20-backend-node_modules-${ENV:-dev}
