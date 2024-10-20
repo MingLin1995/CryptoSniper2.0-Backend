@@ -6,5 +6,5 @@ if [ "$NODE_ENV" = "development" ]; then
 else
     # 測試或生產環境
     pnpm run build
-    node dist/main.js
+    node dist/main.js &
 fi

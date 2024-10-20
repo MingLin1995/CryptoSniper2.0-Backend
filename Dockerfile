@@ -17,7 +17,7 @@ RUN pnpm install
 COPY . .
 
 # 編譯應用程式並檢查 dist 目錄
-RUN pnpm run build && ls -al dist/
+RUN pnpm run build 
 
 # 對應 3000 port （main.ts）
 EXPOSE 3000
