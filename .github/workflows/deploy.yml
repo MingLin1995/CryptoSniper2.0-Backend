@@ -74,7 +74,7 @@ jobs:
             cd CryptoSniper2.0-Backend/ &&
             git checkout ${{ github.ref_name }} &&
             git pull &&
-            echo \"$ENV_CONTENT\" > .env.\$ENVIRONMENT &&
+            echo \"$ENV_CONTENT\" > .env.$ENVIRONMENT &&
             npm install -g pnpm &&
             pnpm install &&
             pnpm run build
