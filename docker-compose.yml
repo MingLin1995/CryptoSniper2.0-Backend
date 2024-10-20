@@ -1,0 +1,44 @@
+# 定義 Docker Compose 文件版本
+version: '3.8'
+
+services:
+  # 定義一個名為 "app" 的服務
+  app:
+    # 構建配置
+    build:
+      # 指定 Dockerfile 的上下文路徑
+      context: .
+      # 指定要使用的 Dockerfile
+      dockerfile: Dockerfile
+      # 構建參數
+      args:
+        # 設置 NODE_ENV，如果未指定則（默認 development）
+        - NODE_ENV=${NODE_ENV:-development}
+    # 指定構建後的鏡像名稱
+    image: cryptosniper20-backend-app:${ENV:-dev}
+    # 指定容器名稱
+    container_name: cryptosniper20-backend-${ENV:-dev}
+    # 端口映射，將容器的 3000 端口映射到主機的 PORT 環境變量指定的端口（默認 3001）
+    ports:
+      - '${PORT:-3001}:3000'
+    # 卷掛載，用於開發環境中的熱重載
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+    # 設置容器內的環境變量
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+    # 將容器連接到指定的網絡
+    networks:
+      - cryptosniper-network
+
+# 定義網絡
+networks:
+  # 創建一個名為 cryptosniper-network 的網絡
+  cryptosniper-network:
+    #  指定網絡名稱
+    name: cryptosniper-network-${ENV:-dev}
+
+# 定義命名卷
+volumes:
+  node_modules:

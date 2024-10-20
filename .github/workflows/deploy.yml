@@ -1,0 +1,83 @@
+# 工作流程名稱
+name: Test and Deploy to EC2
+
+# 觸發條件：當推送到 dev 或 master 分支時
+on:
+  push:
+    branches: [dev, master]
+
+# 定義工作
+jobs:
+  # 測試和部署工作
+  test-and-deploy:
+    # 在最新版本的 Ubuntu 上運行
+    runs-on: ubuntu-latest
+
+    steps:
+      # 步驟 1：檢查 code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 步驟 2：設置 Node.js 環境
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      # 步驟 3：安裝 pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      # 步驟 4：安裝依賴
+      - name: Install dependencies
+        run: pnpm install
+
+      # 步驟 5：測試
+      - name: Run tests
+        run: pnpm test
+
+      # 步驟 6：設置 SSH
+      # 這個步驟創建 SSH 密鑰，以便後續可以安全地連接到 EC2
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+      # 步驟 7：部署到 EC2
+      - name: Deploy to EC2
+        env:
+          # 設置環境變量，這些變量來自 GitHub Secrets
+          PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          HOST: ${{ secrets.EC2_HOST }}
+          USER: ubuntu
+          ENV_TEST: ${{ secrets.ENV_TEST }}
+          ENV_PROD: ${{ secrets.ENV_PROD }}
+        run: |
+          # 根據分支名稱設置環境變量
+          if [[ ${{ github.ref }} == 'refs/heads/dev' ]]; then
+            ENVIRONMENT="test"
+            SCRIPT="docker:test"
+            ENV_CONTENT="$ENV_TEST"
+          elif [[ ${{ github.ref }} == 'refs/heads/master' ]]; then
+            ENVIRONMENT="prod"
+            SCRIPT="docker:prod"
+            ENV_CONTENT="$ENV_PROD"
+          fi
+
+
+          ssh ${USER}@${HOST} "
+            set -x
+            export NVM_DIR=\$HOME/.nvm
+            [ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\"
+            cd CryptoSniper2.0-Backend/ &&
+            git checkout ${{ github.ref_name }} &&
+            git pull &&
+            echo \"$ENV_CONTENT\" > .env.\$ENVIRONMENT &&
+            npm install -g pnpm &&
+            pnpm install &&
+            pnpm run build
+            echo 'Running script: $SCRIPT' &&
+            pnpm run $SCRIPT
+          "
