@@ -15,9 +15,9 @@ services:
         # 設置 NODE_ENV，如果未指定則（默認 development）
         - NODE_ENV=${NODE_ENV:-development}
     # 指定構建後的鏡像名稱
-    image: cryptosniper20-backend-app:${ENV:-dev}
+    image: cryptosniper2.0-backend-app:${ENV:-dev}
     # 指定容器名稱
-    container_name: cryptosniper20-backend-${ENV:-dev}
+    container_name: cryptosniper2.0-backend-${ENV:-dev}
     # 端口映射，將容器的 3000 端口映射到主機的 PORT 環境變量指定的端口（默認 3001）
     ports:
       - '${PORT:-3001}:3000'
