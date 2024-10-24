@@ -57,9 +57,7 @@ pnpm run test
 ### 設置步驟
 
 0. 先進入 EC2 內將專案 git clone 下來
-
 1. 在 GitHub 存儲庫中，進入 "Settings" > "Secrets and variables" > "Actions"
-
 2. 增加以下 secrets
 
    - `EC2_SSH_PRIVATE_KEY`:
@@ -73,6 +71,8 @@ pnpm run test
    - `EC2_HOST`: `ec2-xx-xx-xx-xx.compute-1.amazonaws.com`
    - `ENV_TEST`
    - `ENV_PROD`
+
+3. 在 GitHub 存儲庫中，進入 "Settings" > "Actions" > "General" > "Workflow permissions" 設置為 "Read and write permissions"
 
 ## 資料庫管理
 
