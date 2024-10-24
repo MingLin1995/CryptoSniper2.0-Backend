@@ -2,6 +2,10 @@
 
 CryptoSniper2.0 後端，使用 NestJS 框架開發
 
+[Swagger API Doc](https://crypto-sniper2.0.minglin.vip/api/)
+
+[Unit Test Report](https://MingLin1995.github.io/CryptoSniper2.0-Backend/coverage-report/master/)
+
 ## 環境需求
 
 - Node.js 18
@@ -69,3 +73,25 @@ pnpm run test
    - `EC2_HOST`: `ec2-xx-xx-xx-xx.compute-1.amazonaws.com`
    - `ENV_TEST`
    - `ENV_PROD`
+
+## 資料庫管理
+
+### 開發環境
+
+產生資料庫遷移檔案：
+
+```bash
+docker exec -i cryptosniper2.0-backend-dev npx prisma migrate dev
+```
+
+修改了 Prisma schema 後，要執行這段指令產生新的遷移檔案
+
+### 正式環境
+
+應用資料庫遷移：
+
+```bash
+docker exec -it cryptosniper2.0-backend-test npx prisma migrate deploy
+```
+
+部署新版本到正式環境時，要執行這段指令，更新資料庫結構

@@ -23,12 +23,30 @@ services:
       - '${PORT:-3001}:3000'
     # 卷掛載，用於開發環境中的熱重載
     volumes:
-      - .:/usr/src/app
-      - node_modules:/usr/src/app/node_modules
+      - ${VOLUMES:-.:/usr/src/app}
+      - ${NODE_MODULES_VOLUME:-node_modules:/usr/src/app/node_modules}
     # 設置容器內的環境變量
     environment:
       - NODE_ENV=${NODE_ENV:-development}
+      - DATABASE_URL=${DATABASE_URL}
     # 將容器連接到指定的網絡
+    networks:
+      - cryptosniper-network
+    # 設置依賴服務
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    container_name: cryptosniper2.0-db-${ENV:-dev}
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_DB: ${DB_NAME:-cryptosniper}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - '${DB_PORT:-5432}:5432'
     networks:
       - cryptosniper-network
 
@@ -42,3 +60,4 @@ networks:
 # 定義命名卷
 volumes:
   node_modules:
+  postgres_data:

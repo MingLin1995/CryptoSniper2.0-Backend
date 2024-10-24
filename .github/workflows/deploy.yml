@@ -32,9 +32,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      # 步驟 5：測試
-      - name: Run tests
-        run: pnpm test
+      # 步驟 5：運行測試並生成覆蓋率報告
+      - name: Run tests with coverage
+        run: pnpm run test:cov
+
+      # 步驟 6：部署覆蓋率報告到 GitHub Pages
+      - name: Deploy coverage to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./coverage/lcov-report
+          destination_dir: coverage-report/${{ github.ref_name }}
 
   deploy:
     needs: test
