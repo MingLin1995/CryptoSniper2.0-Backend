@@ -86,7 +86,7 @@ docker exec -i cryptosniper2.0-backend-dev npx prisma migrate dev
 
 修改了 Prisma schema 後，要執行這段指令產生新的遷移檔案
 
-### 正式環境
+### 測試環境
 
 應用資料庫遷移：
 
@@ -95,3 +95,9 @@ docker exec -it cryptosniper2.0-backend-test npx prisma migrate deploy
 ```
 
 部署新版本到正式環境時，要執行這段指令，更新資料庫結構
+
+### 正式環境
+
+```bash
+docker exec -it cryptosniper2.0-backend-prod npx prisma migrate deploy
+```
