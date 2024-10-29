@@ -16,6 +16,9 @@ RUN pnpm install
 # 複製所有內容到工作目錄
 COPY . .
 
+# 生成 Prisma 客戶端
+RUN npx prisma generate
+
 # 編譯應用程式
 RUN pnpm run build 
 
@@ -27,4 +30,4 @@ ARG NODE_ENV=development
 # 將 ARG 的值設置為環境變量
 ENV NODE_ENV=${NODE_ENV}
 
-CMD ["sh", "-c", "if [ \"$NODE_ENV\" = \"development\" ]; then pnpm run start:dev; else node dist/main.js; fi"]
+CMD ["sh", "-c", "npx prisma generate && if [ \"$NODE_ENV\" = \"development\" ]; then pnpm run start:dev; else node dist/main.js; fi"]
