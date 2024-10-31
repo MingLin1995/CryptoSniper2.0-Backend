@@ -60,5 +60,6 @@ networks:
 # 定義命名卷
 volumes:
   node_modules:
+  postgres_data_dev:
   postgres_data_prod:
   postgres_data_test:

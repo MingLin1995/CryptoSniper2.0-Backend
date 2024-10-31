@@ -25,4 +25,7 @@ docker system prune -f
 echo "Building and starting production container..."
 docker-compose -f $COMPOSE_FILE --env-file $ENV_FILE --project-name $PROJECT_NAME up --build -d
 
+# 執行資料庫遷移
+echo "Running database migrations..."
+docker exec $CONTAINER_NAME npx prisma migrate deploy
 
