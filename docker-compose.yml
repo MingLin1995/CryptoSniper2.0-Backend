@@ -26,12 +26,12 @@ services:
       - ${VOLUMES:-.:/usr/src/app}
       - /usr/src/app/node_modules
     # 設置容器內的環境變量
-    environment:
-      - NODE_ENV=${NODE_ENV:-development}
-      - DATABASE_URL=${DATABASE_URL}
+    env_file:
+      - .env.${ENV}   
     # 將容器連接到指定的網絡
     networks:
       - cryptosniper-network
+      - redis-network
     # 設置依賴服務
     depends_on:
       - db
@@ -56,6 +56,9 @@ networks:
   cryptosniper-network:
     #  指定網絡名稱
     name: cryptosniper-network-${ENV:-dev}
+  redis-network:
+    external: true
+    name: cryptosniper-network
 
 # 定義命名卷
 volumes:
