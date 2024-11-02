@@ -3,11 +3,18 @@ import { UsersService } from './users.service';
 import { UsersRepository } from './users.repository';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { RedisService } from '../redis/redis.service';
 
 describe('UsersService', () => {
   let service: UsersService;
   let repository: UsersRepository;
 
+  // Mock RedisService
+  const mockRedisService = {
+    get: jest.fn(),
+  };
+
+  // Mock UsersRepository
   const mockUsersRepository = {
     create: jest.fn(),
     findAll: jest.fn(),
@@ -20,6 +27,10 @@ describe('UsersService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UsersService,
+        {
+          provide: RedisService,
+          useValue: mockRedisService,
+        },
         {
           provide: UsersRepository,
           useValue: mockUsersRepository,
@@ -51,15 +62,31 @@ describe('UsersService', () => {
   });
 
   describe('findAll', () => {
-    it('should return an array of users', async () => {
-      const expectedResult = [
+    it('should log Redis KlineData and return users', async () => {
+      // 模擬 Redis 實際資料
+      const mockKlineData = `[[1730553300000,"69529.80","69614.00","69529.70","69602.00","531.820",1730553599999,"37008939.40770",7181,"325.430","22645807.80770","0"],[1730553600000,"69602.00","69649.00","69600.80","69629.20","410.470",1730553899999,"28581609.91780",5852,"214.086","14906992.82970","0"]]`;
+
+      mockRedisService.get.mockResolvedValue(mockKlineData);
+
+      const expectedUsers = [
         { id: 1, email: 'test@example.com', name: 'Test User' },
       ];
-      mockUsersRepository.findAll.mockResolvedValue(expectedResult);
+      mockUsersRepository.findAll.mockResolvedValue(expectedUsers);
+
+      // 監控 console.log
+      const consoleSpy = jest.spyOn(console, 'log');
 
       const result = await service.findAll();
-      expect(result).toEqual(expectedResult);
-      expect(mockUsersRepository.findAll).toHaveBeenCalled();
+
+      // 驗證 Redis get 是否被呼叫且使用正確的 key
+      expect(mockRedisService.get).toHaveBeenCalledWith('KlineData');
+
+      // 驗證 console.log 是否被呼叫且印出 Redis 資料
+      expect(mockRedisService.get).toHaveBeenCalledWith('KlineData');
+      expect(consoleSpy).toHaveBeenCalledWith(mockKlineData);
+
+      // 驗證回傳值
+      expect(result).toEqual(expectedUsers);
     });
   });
 

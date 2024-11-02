@@ -17,7 +17,7 @@ export class UsersService {
   }
 
   async findAll() {
-    const data = await this.redisService.get('KlineDat');
+    const data = await this.redisService.get('KlineData');
     console.log(data);
     return this.usersRepository.findAll();
   }
