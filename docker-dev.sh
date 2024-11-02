@@ -9,6 +9,7 @@ CONTAINER_NAME="cryptosniper2.0-backend-dev"
 # 檢查並停止現有的容器（如果存在）
 if docker ps -q -f name=$CONTAINER_NAME | grep -q .; then
     echo "Stopping existing container..."
+    docker exec $CONTAINER_NAME npx prisma migrate dev
     docker-compose -f $COMPOSE_FILE --env-file $ENV_FILE --project-name $PROJECT_NAME down
 else
     echo "No existing container found."
