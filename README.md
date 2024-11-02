@@ -2,7 +2,7 @@
 
 CryptoSniper2.0 後端，使用 NestJS 框架開發
 
-[Swagger API Doc](https://crypto-sniper2.0.minglin.vip/api/)
+[Swagger API Doc](https://crypto-sniper2.0.minglin.vip/api/doc)
 
 [Unit Test Report](https://MingLin1995.github.io/CryptoSniper2.0-Backend/coverage-report/master/)
 
